@@ -1,0 +1,4 @@
+create table ams.address (address_id uuid not null, created_date int8 not null, modified_date int8, address1 varchar(255), address2 varchar(255), address_type int4, city varchar(255), country_code int4, state varchar(255), zip_code varchar(255), customer_customer_id uuid, primary key (address_id));
+create table ams.customer (customer_id uuid not null, created_date int8 not null, modified_date int8, email varchar(255), first_name varchar(255), last_name varchar(255), phone_number varchar(255), primary key (customer_id));
+create table ams.vehicle (vehicle_id uuid not null, created_date int8 not null, modified_date int8, make varchar(255), model varchar(255), type varchar(255), primary key (vehicle_id));
+alter table if exists ams.address add constraint FK214xlexe9f13rdbg15mw73h5a foreign key (customer_customer_id) references ams.customer;
