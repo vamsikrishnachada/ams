@@ -43,6 +43,11 @@ public class VehicleController {
         return vehicleService.getVehiclesByType(type);
     }
 
+    @RequestMapping(method = RequestMethod.GET, path = "/searchByVin", produces = "application/json")
+    public Optional<List<Vehicle>> findVehiclesByVin(@RequestParam("vin") String vin) {
+        return vehicleService.getVehiclesByVin(vin);
+    }
+
     @DeleteMapping(path = "/delete/{id}")
     public ResponseEntity<String> deleteVehicle(@PathVariable("id") UUID id) {
         Optional<Vehicle> vehicle = vehicleService.getVehicleByID(id);

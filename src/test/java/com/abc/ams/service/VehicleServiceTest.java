@@ -112,6 +112,4 @@ public class VehicleServiceTest {
         return vehicle;
     }
 
-    // Add more test methods as needed for other functionalities of VehicleService
-
 }

@@ -1,6 +1,5 @@
 package com.abc.ams.model;
 
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -12,19 +11,13 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-public class Vehicle extends Persistence {
-
+public class CustomerVehicleMapping extends Persistence{
     @Id
     @GeneratedValue
-    private UUID vehicleId;
+    private UUID customerVehicleMappingId;
 
-    private String vin;
+    private Customer customer;
 
-    private String make;
-
-    private String model;
-
-    private String type;
-
+    private Vehicle vehicle;
 
 }

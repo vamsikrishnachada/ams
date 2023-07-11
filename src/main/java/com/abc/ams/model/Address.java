@@ -14,7 +14,8 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-public class Address extends Persistence {
+public class
+Address extends Persistence {
     @Id
     @GeneratedValue
     private UUID addressId;

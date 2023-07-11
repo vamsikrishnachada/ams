@@ -36,6 +36,10 @@ public class VehicleService {
         return Optional.ofNullable(vehicleRepository.findVehiclesByType(type));
     }
 
+    public Optional<List<Vehicle>> getVehiclesByVin(String vin){
+        return Optional.ofNullable(vehicleRepository.findVehiclesByVin(vin));
+    }
+
     public void deleteVehicle(Vehicle vehicle){
         vehicleRepository.delete(vehicle);
     }

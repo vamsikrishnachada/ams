@@ -13,4 +13,6 @@ public interface VehicleRepository extends CrudRepository<Vehicle, UUID> {
  List<Vehicle> findVehiclesByMakeAndModel(String make,String model);
 
  List<Vehicle> findVehiclesByType(String type);
+
+ List<Vehicle> findVehiclesByVin(String vin);
 }
