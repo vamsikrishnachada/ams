@@ -1,6 +1,8 @@
-package ams.client.model;
+package ams.business.model;
 
 import ams.business.model.Mechanic;
+import ams.client.model.Customer;
+import ams.client.model.Persistence;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

@@ -79,4 +79,8 @@ public class MechanicService {
     public List<Mechanic> getAllMechanics(){
         return StreamSupport.stream(mechanicRepository.findAll().spliterator(),false).collect(Collectors.toList());
     }
+
+    public boolean isAppointmentSlotAvailable(LocalDate date, String slotTime) {
+        return false;
+    }
 }

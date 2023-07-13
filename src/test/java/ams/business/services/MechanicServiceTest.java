@@ -13,13 +13,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class MechanicServiceTest {
@@ -145,10 +143,33 @@ public class MechanicServiceTest {
     @Test
     public void getMechanicByPhoneNumber() {
         String phoneNumber = "1234567890";
-        Mockito.when(mechanicRepository.getMechanicByPhoneNumber(phoneNumber)).thenReturn(mechanic);
+        when(mechanicRepository.getMechanicByPhoneNumber(phoneNumber)).thenReturn(mechanic);
 
         Mechanic retrievedMechanic = mechanicService.getMechanicByPhoneNumber(phoneNumber);
         assertNotNull(retrievedMechanic);
         assertEquals(mechanic, retrievedMechanic);
+    }
+
+    @Test
+    public void testGetAllMechanics() {
+        Mechanic mechanic1 = new Mechanic();
+        mechanic1.setMechanicId(UUID.randomUUID());
+        mechanic1.setFirstName("John");
+        mechanic1.setLastName("Doe");
+
+        Mechanic mechanic2 = new Mechanic();
+        mechanic2.setMechanicId(UUID.randomUUID());
+        mechanic2.setFirstName("Jane");
+        mechanic2.setLastName("Smith");
+
+        List<Mechanic> mechanicsList = Arrays.asList(mechanic1, mechanic2);
+
+        when(mechanicRepository.findAll()).thenReturn(mechanicsList);
+
+        List<Mechanic> result = mechanicService.getAllMechanics();
+
+        assertEquals(2, result.size());
+        assertEquals(mechanic1.getFirstName(), result.get(0).getFirstName());
+        assertEquals(mechanic2.getFirstName(), result.get(1).getFirstName());
     }
 }

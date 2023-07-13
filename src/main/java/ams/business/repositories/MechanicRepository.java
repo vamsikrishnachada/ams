@@ -12,6 +12,7 @@ import java.util.UUID;
 @Repository
 public interface MechanicRepository extends CrudRepository<Mechanic, UUID>{
     Mechanic getMechanicByPhoneNumber(String phoneNumber);
+
 //    void addAppointmentHours(LocalDate date,String startTime, String endTime);
 //    void addAppointmentHours(List<LocalDate> dateList, String startTime, String endTime);
 //
