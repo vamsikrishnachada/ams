@@ -47,7 +47,10 @@ public class MechanicController {
         mechanicService.addAppointmentHours(mechanic,dateList,startTime,endTime);
         return ResponseEntity.ok().build();
     }
-
+    @RequestMapping(method = RequestMethod.GET, path = "/getAllMechanics", produces = "application/json")
+    public List<Mechanic> getAllMechanics() {
+        return mechanicService.getAllMechanics();
+    }
 
 
 
