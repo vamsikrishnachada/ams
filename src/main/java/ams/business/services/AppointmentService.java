@@ -43,7 +43,7 @@ public class AppointmentService {
             for (Map.Entry<String, Map<String, Boolean>> entry : dayDateTime.getTimeMap().entrySet()) {
                 String time = entry.getKey();
                 Map<String, Boolean> timeData = entry.getValue();
-                if (!timeData.getOrDefault("Appointment", false)) {
+                if (timeData.get("Appointment")) {
                     availableSlots.add(time);
                 }
             }

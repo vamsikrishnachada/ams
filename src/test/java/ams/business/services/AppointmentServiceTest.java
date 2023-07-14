@@ -54,6 +54,14 @@ public class AppointmentServiceTest {
 
         Map<Mechanic, List<String>> mechanicAvailableSlots = new HashMap<>();
         for (Mechanic mechanic : mechanics) {
+            DayDateTime dayDateTime = new DayDateTime(appointmentDate);
+            Map<String, Map<String, Boolean>> timeMap = new HashMap<>();
+            Map<String, Boolean> slotMap = new HashMap<>();
+            slotMap.put("Appointment", Boolean.TRUE);
+            timeMap.put(appointmentSlotTime, slotMap);
+            dayDateTime.setTimeMap(timeMap);
+
+            mechanic.getDailyTimeMap().put(appointmentDate, dayDateTime);
             mechanicAvailableSlots.put(mechanic, Collections.singletonList(appointmentSlotTime));
         }
 
@@ -67,7 +75,7 @@ public class AppointmentServiceTest {
         DayDateTime dayDateTime = new DayDateTime(appointmentDate);
         Map<String, Map<String, Boolean>> timeMap = new HashMap<>();
         Map<String, Boolean> slotMap = new HashMap<>();
-        slotMap.put("Appointment", false);
+        slotMap.put("Appointment", Boolean.TRUE);
         timeMap.put(appointmentSlotTime, slotMap);
         dayDateTime.setTimeMap(timeMap);
         mechanic.getDailyTimeMap().put(appointmentDate, dayDateTime);
