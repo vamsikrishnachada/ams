@@ -1,0 +1,3 @@
+BookAppointment(LocalDate date, String slotTime, customer){
+ List<mech>
+}
