@@ -57,8 +57,8 @@ public class MechanicService {
 
 
     public Boolean isAppointmentSlotAvailable(Mechanic mechanic, LocalDate date, String slotTime) {
-        if (mechanic.getDailyTimeMap().get(date).getTimeMap().get(slotTime).get("Appointment") != null) {
-            return mechanic.getDailyTimeMap().get(date).getTimeMap().get(slotTime).get("Appointment");
+        if (mechanic.getDailyTimeMap().get(date).getTimeMap().get(slotTime) != null) {
+            return mechanic.getDailyTimeMap().get(date).getTimeMap().get(slotTime).isAppointment();
         } else {
             return Boolean.FALSE;
         }

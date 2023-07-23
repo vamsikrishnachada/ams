@@ -2,6 +2,7 @@ package ams.business.services;
 
 import ams.business.model.DayDateTime;
 import ams.business.model.Mechanic;
+import ams.business.model.TimeSlot;
 import ams.business.model.constants.TimeToIndex;
 import ams.business.repositories.MechanicRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,8 +55,8 @@ public class MechanicServiceTest {
         assertNotNull(dayDateTime);
         assertNotNull(dayDateTime.getTimeMap().get(startTime));
         assertNotNull(dayDateTime.getTimeMap().get(endTime));
-        assertTrue(dayDateTime.getTimeMap().get(startTime).get("Appointment"));
-        assertTrue(dayDateTime.getTimeMap().get(endTime).get("Appointment"));
+        assertTrue(dayDateTime.getTimeMap().get(startTime).isAppointment());
+        assertTrue(dayDateTime.getTimeMap().get(endTime).isAppointment());
     }
 
     @Test
@@ -75,18 +76,15 @@ public class MechanicServiceTest {
             assertTrue(dailyTimeMap.containsKey(date));
 
             DayDateTime dayDateTime = dailyTimeMap.get(date);
-            Map<String, Map<String, Boolean>> timeMap = dayDateTime.getTimeMap();
+            Map<String, TimeSlot> timeMap = dayDateTime.getTimeMap();
 
             assertNotNull(dayDateTime);
             assertNotNull(timeMap);
-            System.out.println("Date: " + date);
-            System.out.println("Time Map: " + timeMap);
 
             for (int i = TimeToIndex.getTimeToIndex().get(startTime); i <= TimeToIndex.getTimeToIndex().get(endTime); i++) {
                 String timeSlot = TimeToIndex.getIndexToTime().get(i);
-                System.out.println(timeSlot);
                 assertNotNull(timeMap.get(timeSlot));
-                assertTrue(timeMap.get(timeSlot).get("Appointment"));
+                assertTrue(timeMap.get(timeSlot).isAppointment());
             }
         }
     }
@@ -98,9 +96,9 @@ public class MechanicServiceTest {
         String slotTime = "10:00";
 
         DayDateTime dayDateTime = new DayDateTime(date);
-        Map<String, Map<String, Boolean>> timeMap = new HashMap<>();
-        Map<String, Boolean> slotMap = new HashMap<>();
-        slotMap.put("Appointment", true);
+        Map<String, TimeSlot> timeMap = new HashMap<>();
+        TimeSlot slotMap = new TimeSlot(slotTime);
+        slotMap.setAppointment(true);
         timeMap.put(slotTime, slotMap);
         dayDateTime.setTimeMap(timeMap);
 
@@ -116,9 +114,9 @@ public class MechanicServiceTest {
         String slotTime = "10:00";
 
         DayDateTime dayDateTime = new DayDateTime(date);
-        Map<String, Map<String, Boolean>> timeMap = new HashMap<>();
-        Map<String, Boolean> slotMap = new HashMap<>();
-        slotMap.put("Appointment", false);
+        Map<String, TimeSlot> timeMap = new HashMap<>();
+        TimeSlot slotMap = new TimeSlot(slotTime);
+        slotMap.setAppointment(false);
         timeMap.put(slotTime, slotMap);
         dayDateTime.setTimeMap(timeMap);
 

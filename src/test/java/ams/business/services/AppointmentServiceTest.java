@@ -49,43 +49,62 @@ public class AppointmentServiceTest {
 
     @Test
     public void getAvailableSlots() {
+        LocalDate appointmentDate = LocalDate.now();
+        String appointmentSlotTime = "10:00";
+
         List<Mechanic> mechanics = Arrays.asList(new Mechanic(), new Mechanic(), new Mechanic());
         when(mechanicService.getAllMechanics()).thenReturn(mechanics);
 
         Map<Mechanic, List<String>> mechanicAvailableSlots = new HashMap<>();
         for (Mechanic mechanic : mechanics) {
             DayDateTime dayDateTime = new DayDateTime(appointmentDate);
-            Map<String, Map<String, Boolean>> timeMap = new HashMap<>();
-            Map<String, Boolean> slotMap = new HashMap<>();
-            slotMap.put("Appointment", Boolean.TRUE);
-            timeMap.put(appointmentSlotTime, slotMap);
-            dayDateTime.setTimeMap(timeMap);
-
             mechanic.getDailyTimeMap().put(appointmentDate, dayDateTime);
-            mechanicAvailableSlots.put(mechanic, Collections.singletonList(appointmentSlotTime));
+
+            // Assuming that the time slot is available, we set "Appointment" to true for the slot
+            dayDateTime.getTimeMap().get(appointmentSlotTime).setAppointment(true);
+
+            List<String> availableSlots = new ArrayList<>();
+            availableSlots.add(appointmentSlotTime);
+            mechanicAvailableSlots.put(mechanic, availableSlots);
         }
 
         Map<Mechanic, List<String>> availableSlots = appointmentService.getAvailableSlots(appointmentDate);
         assertEquals(mechanicAvailableSlots, availableSlots);
     }
 
+
     @Test
     public void getAvailableSlotsForMechanic() {
+        LocalDate appointmentDate = LocalDate.now();
+        String appointmentSlotTime = "10:00";
+
         Mechanic mechanic = new Mechanic();
         DayDateTime dayDateTime = new DayDateTime(appointmentDate);
-        Map<String, Map<String, Boolean>> timeMap = new HashMap<>();
-        Map<String, Boolean> slotMap = new HashMap<>();
-        slotMap.put("Appointment", Boolean.TRUE);
-        timeMap.put(appointmentSlotTime, slotMap);
-        dayDateTime.setTimeMap(timeMap);
         mechanic.getDailyTimeMap().put(appointmentDate, dayDateTime);
+
+        // Assuming that the time slot is available, we set "Appointment" to true for the slot
+        dayDateTime.getTimeMap().get(appointmentSlotTime).setAppointment(true);
 
         List<String> availableSlots = appointmentService.getAvailableSlotsForMechanic(appointmentDate, mechanic);
         assertEquals(Collections.singletonList(appointmentSlotTime), availableSlots);
     }
 
+
     @Test
     public void bookAppointment_slotAvailable() {
+        LocalDate appointmentDate = LocalDate.now();
+        String appointmentSlotTime = "10:00";
+
+        Mechanic mechanic = new Mechanic();
+        Customer customer = new Customer();
+
+        DayDateTime dayDateTime = new DayDateTime(appointmentDate);
+        mechanic.getDailyTimeMap().put(appointmentDate, dayDateTime);
+
+        // Assuming that the time slot is available, we set "Appointment" to true for the slot
+        dayDateTime.getTimeMap().get(appointmentSlotTime).setAppointment(true);
+
+        // We create an appointment object to be saved and returned by the repository
         Appointment appointment = new Appointment();
         appointment.setDate(appointmentDate);
         appointment.setSlotTime(appointmentSlotTime);
@@ -97,9 +116,13 @@ public class AppointmentServiceTest {
 
         appointmentService.bookAppointment(appointmentDate, appointmentSlotTime, customer, mechanic);
 
+        // Verify that the appointment is saved once
         verify(appointmentRepository, times(1)).save(any(Appointment.class));
-        assertFalse(mechanic.getDailyTimeMap().get(appointmentDate).getTimeMap().get(appointmentSlotTime).get("Appointment"));
+
+        // Ensure that the appointment slot is set to false after booking
+        assertFalse(mechanic.getDailyTimeMap().get(appointmentDate).getTimeMap().get(appointmentSlotTime).isAppointment());
     }
+
 
 
     @Test

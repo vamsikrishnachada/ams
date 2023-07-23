@@ -9,10 +9,9 @@ import java.util.UUID;
 
 @Repository
 public interface VehicleRepository extends CrudRepository<Vehicle, UUID> {
- List<Vehicle> findVehiclesByMake(String make);
- List<Vehicle> findVehiclesByMakeAndModel(String make,String model);
+ List<Vehicle> findAllByMake(String make);
+ List<Vehicle> findAllByMakeAndModel(String make,String model);
 
- List<Vehicle> findVehiclesByType(String type);
-
- List<Vehicle> findVehiclesByVin(String vin);
+ List<Vehicle> findAllByType(String type);
+ Vehicle findVehiclesByVin(String vin);
 }

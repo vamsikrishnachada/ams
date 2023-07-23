@@ -27,22 +27,25 @@ public class VehicleService {
     }
 
     public List<Vehicle> getVehiclesByMake(String make){
-        return vehicleRepository.findVehiclesByMake(make);
+
+        return vehicleRepository.findAllByMake(make);
     }
     public List<Vehicle> getVehiclesByMakeAndModel(String make, String model){
-        return vehicleRepository.findVehiclesByMakeAndModel(make, model);
+        return vehicleRepository.findAllByMakeAndModel(make, model);
     }
 
     public List<Vehicle> getVehiclesByType(String type){
-        return vehicleRepository.findVehiclesByType(type);
+        return vehicleRepository.findAllByType(type);
     }
 
-    public List<Vehicle> getVehiclesByVin(String vin){
+    public Vehicle getVehiclesByVin(String vin){
         return vehicleRepository.findVehiclesByVin(vin);
     }
 
     public void deleteVehicle(Vehicle vehicle){
         vehicleRepository.delete(vehicle);
     }
+
+    public void updateVehicle(Vehicle vehicle) { vehicleRepository.save(vehicle);}
 
 }

@@ -34,19 +34,24 @@ public class MechanicController {
         return mechanicService.isAppointmentSlotAvailable(mechanic,date,slotTime);
     }
 
-    @RequestMapping(method = RequestMethod.POST, produces = "application/json")
-    public ResponseEntity addAppointmentHours(@RequestBody Mechanic mechanic,@RequestParam("date") LocalDate date,
-                                                    @RequestParam("startTime") String startTime,@RequestParam("endTime") String endTime) {
-        mechanicService.addAppointmentHours(mechanic,date,startTime,endTime);
+    @RequestMapping(value = "/single", method = RequestMethod.POST, produces = "application/json")
+    public ResponseEntity addAppointmentHoursSingleDate(@RequestBody Mechanic mechanic,
+                                                        @RequestParam("date") LocalDate date,
+                                                        @RequestParam("startTime") String startTime,
+                                                        @RequestParam("endTime") String endTime) {
+        mechanicService.addAppointmentHours(mechanic, date, startTime, endTime);
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(method = RequestMethod.POST, produces = "application/json")
-    public ResponseEntity addAppointmentHours(@RequestBody Mechanic mechanic,@RequestParam("dateList") List<LocalDate> dateList,
-                                              @RequestParam("startTime") String startTime,@RequestParam("endTime") String endTime) {
-        mechanicService.addAppointmentHours(mechanic,dateList,startTime,endTime);
+    @RequestMapping(value = "/multiple", method = RequestMethod.POST, produces = "application/json")
+    public ResponseEntity addAppointmentHoursMultipleDates(@RequestBody Mechanic mechanic,
+                                                           @RequestParam("dateList") List<LocalDate> dateList,
+                                                           @RequestParam("startTime") String startTime,
+                                                           @RequestParam("endTime") String endTime) {
+        mechanicService.addAppointmentHours(mechanic, dateList, startTime, endTime);
         return ResponseEntity.ok().build();
     }
+
     @RequestMapping(method = RequestMethod.GET, path = "/getAllMechanics", produces = "application/json")
     public List<Mechanic> getAllMechanics() {
         return mechanicService.getAllMechanics();

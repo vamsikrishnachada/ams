@@ -3,6 +3,7 @@ package ams.business.services;
 import ams.business.model.DayDateTime;
 import ams.business.model.Mechanic;
 import ams.business.model.Appointment;
+import ams.business.model.TimeSlot;
 import ams.business.repositories.AppointmentRepository;
 import ams.client.model.Customer;
 import lombok.Data;
@@ -40,11 +41,9 @@ public class AppointmentService {
         DayDateTime dayDateTime = mechanic.getDailyTimeMap().get(date);
 
         if (dayDateTime != null) {
-            for (Map.Entry<String, Map<String, Boolean>> entry : dayDateTime.getTimeMap().entrySet()) {
-                String time = entry.getKey();
-                Map<String, Boolean> timeData = entry.getValue();
-                if (timeData.get("Appointment")) {
-                    availableSlots.add(time);
+            for (TimeSlot timeSlot : dayDateTime.getTimeMap().values()) {
+                if (timeSlot.isAppointment()) {
+                    availableSlots.add(timeSlot.getTime());
                 }
             }
         }
@@ -52,40 +51,40 @@ public class AppointmentService {
         return availableSlots;
     }
 
-   // private static final Object sharedLock = new Object(); // Shared lock object across all instances
+
+    // private static final Object sharedLock = new Object(); // Shared lock object across all instances
 
     public void bookAppointment(LocalDate date, String slotTime, Customer customer, Mechanic mechanic) {
-        //synchronized (sharedLock) { // Synchronize access to the booking process using the shared lock object
+        if (mechanicService.isAppointmentSlotAvailable(mechanic, date, slotTime)) {
+            Appointment appointment = new Appointment();
+            appointment.setDate(date);
+            appointment.setSlotTime(slotTime);
+            appointment.setMechanic(mechanic);
+            appointment.setCustomer(customer);
 
-            if(mechanicService.isAppointmentSlotAvailable(mechanic,date, slotTime)){
-                Appointment appointment = new Appointment();
-                appointment.setDate(date);
-                appointment.setSlotTime(slotTime);
-                appointment.setMechanic(mechanic);
-                appointment.setCustomer(customer);
-                appointmentRepository.save(appointment);
-//                mechanic.getDailyTimeMap().get(date).getTimeMap().get(slotTime).put("Appointment", Boolean.FALSE);
-                Map<LocalDate, DayDateTime> dailyTimeMap = mechanic.getDailyTimeMap();
-                DayDateTime dayDateTime = dailyTimeMap.get(date);
+            Map<LocalDate, DayDateTime> dailyTimeMap = mechanic.getDailyTimeMap();
+            DayDateTime dayDateTime = dailyTimeMap.get(date);
 
-                if (dayDateTime == null) {
-                    dayDateTime = new DayDateTime(date);
-                    dailyTimeMap.put(date, dayDateTime);
-                }
+            if (dayDateTime == null) {
+                dayDateTime = new DayDateTime(date);
+                dailyTimeMap.put(date, dayDateTime);
+            }
 
-                Map<String, Map<String, Boolean>> timeMap = dayDateTime.getTimeMap();
-                if (timeMap.get(slotTime) == null) {
-                    Map<String, Boolean> timeData = new HashMap<>();
-                    timeData.put("Appointment", Boolean.FALSE);
-                    timeMap.put(slotTime, timeData);
-                } else {
-                    timeMap.get(slotTime).put("Appointment", Boolean.FALSE);
-                }
+            Map<String, TimeSlot> timeMap = dayDateTime.getTimeMap();
+            TimeSlot timeSlot = timeMap.get(slotTime);
 
-            } else {
+            if (timeSlot == null || !timeSlot.isAppointment()) {
+                // This should not happen if the timeMap is properly initialized.
                 throw new IllegalStateException("Selected appointment slot is not available");
             }
+
+            appointmentRepository.save(appointment);
+            timeSlot.setAppointment(false);
+        } else {
+            throw new IllegalStateException("Selected appointment slot is not available");
         }
+    }
+
 
     public Appointment getAppointmentById(UUID appointmentId) {
         return appointmentRepository.findByAppointmentId(appointmentId);

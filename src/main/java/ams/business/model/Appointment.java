@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -20,7 +21,9 @@ public class Appointment extends Persistence {
     @Id
     @GeneratedValue
     private UUID appointmentId;
+    @ManyToOne
     private Customer customer;
+    @ManyToOne
     private Mechanic mechanic;
     private LocalDate date;
     private String slotTime;

@@ -24,6 +24,16 @@ public class CustomerController {
     public ResponseEntity addCustomer(@RequestBody Customer customer) {
         customerService.addCustomer(customer);
         return ResponseEntity.ok().build();
+    }
 
+    @RequestMapping(method = RequestMethod.PUT, consumes = "application/json")
+    public ResponseEntity updateCustomer(@RequestBody Customer customer) {
+        customerService.updateCustomer(customer);
+        return ResponseEntity.ok().build();
+    }
+    @RequestMapping(method = RequestMethod.DELETE, consumes = "application/json")
+    public ResponseEntity deleteCustomer(@RequestBody Customer customer) {
+        customerService.deleteCustomer(customer);
+        return ResponseEntity.ok().build();
     }
 }

@@ -89,6 +89,49 @@
                     </excludes>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.bitbucket.dollar</groupId>
+                <artifactId>dollar</artifactId>
+                <version>1.0-beta3</version>
+
+                <executions>
+                    <execution>
+                        <id>generate-ddl</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>ddl</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <source>org.hibernate.tool.hbm2ddl.SchemaExport</source>
+                    <outputFile>target/generated-schema.sql</outputFile>
+                    <properties>
+                        <!-- Adjust the properties as per your database configuration -->
+                        <javax.persistence.jdbc.url>jdbc:postgresql://localhost:5432/ams</javax.persistence.jdbc.url>
+                        <javax.persistence.jdbc.user>postgres</javax.persistence.jdbc.user>
+                        <javax.persistence.jdbc.password>admin</javax.persistence.jdbc.password>
+                        <javax.persistence.jdbc.driver>org.postgresql.Driver</javax.persistence.jdbc.driver>
+                        <javax.persistence.schema-generation.scripts.action>create</javax.persistence.schema-generation.scripts.action>
+                        <javax.persistence.schema-generation.scripts.create-target>target/generated-schema.sql</javax.persistence.schema-generation.scripts.create-target>
+                    </properties>
+                </configuration>
+                <dependencies>
+                    <!-- Add the required dependencies -->
+                    <dependency>
+                        <groupId>javax.persistence</groupId>
+                        <artifactId>javax.persistence-api</artifactId>
+                        <version>2.2</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.hibernate</groupId>
+                        <artifactId>hibernate-core</artifactId>
+                        <version>5.5.6.Final</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
         </plugins>
     </build>
 

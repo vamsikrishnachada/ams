@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -56,9 +57,7 @@ public class CustomerVehicleMappingController {
 
     @GetMapping(path="/searchCustomersByVehicleVin", produces = "application/json")
     public List<Customer> findCustomersByVehicleVin(@RequestParam("vin") String vin){
-        return vehicleService.getVehiclesByVin(vin)
-                .stream()
-                .flatMap(vehicle -> customerVehicleMappingService.getCustomersByVehicle(vehicle).stream())
-                .collect(Collectors.toList());
+        Vehicle vehicle = vehicleService.getVehiclesByVin(vin);
+        return customerVehicleMappingService.getCustomersByVehicle(vehicle).stream().collect(Collectors.toList());
     }
 }

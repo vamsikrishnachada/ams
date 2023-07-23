@@ -1,5 +1,6 @@
 package ams.client.web;
 
+import ams.client.model.Customer;
 import ams.client.model.Vehicle;
 import ams.client.services.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,20 +45,22 @@ public class VehicleController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/searchByVin", produces = "application/json")
-    public List<Vehicle> findVehiclesByVin(@RequestParam("vin") String vin) {
+    public Vehicle findVehiclesByVin(@RequestParam("vin") String vin) {
         return vehicleService.getVehiclesByVin(vin);
     }
 
-    @DeleteMapping(path = "/delete/{id}")
-    public ResponseEntity<String> deleteVehicle(@PathVariable("id") UUID id) {
-        Optional<Vehicle> vehicle = vehicleService.getVehicleByID(id);
-        if (vehicle.isPresent()) {
-            vehicleService.deleteVehicle(vehicle.get());
+    @RequestMapping(method = RequestMethod.DELETE, consumes = "application/json")
+    public ResponseEntity<String> deleteVehicle(@RequestBody Vehicle vehicle) {
+            vehicleService.deleteVehicle(vehicle);
             return ResponseEntity.ok("Vehicle deleted successfully");
-        } else {
-            return ResponseEntity.notFound().build();
-        }
     }
+
+    @RequestMapping(method = RequestMethod.PUT, consumes = "application/json")
+    public ResponseEntity<String> updateVehicle(@RequestBody Vehicle vehicle) {
+        vehicleService.updateVehicle(vehicle);
+        return ResponseEntity.ok("Vehicle updated successfully");
+    }
+
 
 
 }

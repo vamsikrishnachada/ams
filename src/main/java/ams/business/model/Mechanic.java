@@ -4,9 +4,7 @@ import ams.client.model.Persistence;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +22,9 @@ public class Mechanic extends Persistence {
     private String lastName;
 
     private String phoneNumber;
-    private Map<LocalDate,DayDateTime> dailyTimeMap = new HashMap<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "mechanic_id")
+    @MapKey(name = "date") // Maps LocalDate keys to DayDateTime values
+    private Map<LocalDate, DayDateTime> dailyTimeMap = new HashMap<>();
 
 }

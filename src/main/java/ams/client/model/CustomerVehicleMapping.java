@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
@@ -16,8 +17,10 @@ public class CustomerVehicleMapping extends Persistence{
     @GeneratedValue
     private UUID customerVehicleMappingId;
 
+    @ManyToOne
     private Customer customer;
 
+    @ManyToOne
     private Vehicle vehicle;
 
 }
